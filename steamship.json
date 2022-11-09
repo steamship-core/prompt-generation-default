@@ -1,6 +1,6 @@
 {
   "type": "plugin",
-  "handle": "",
+  "handle": "prompt-generation-default",
   "version": "0.0.1",
   "description": "",
   "author": "",

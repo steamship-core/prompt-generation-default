@@ -1,13 +1,11 @@
-from steamship.data import TagKind
+from steamship.data import TagKind, GenerationTag, TagValue
 from steamship.plugin.inputs.block_and_tag_plugin_input import BlockAndTagPluginInput
 
-from api import TaggerPlugin
+from src.api import PromptGenerationPlugin
 from steamship import File, Block, TaskState, DocTag
 from steamship.plugin.request import PluginRequest
 
 from test import TEST_DATA
-
-WANT_SENTENCES = ["A Poem.", "Roses are red.", "Violets are blue.", "Sugar is sweet, and I love you."]
 
 
 def _read_test_file(filename: str) -> str:
@@ -17,7 +15,7 @@ def _read_test_file(filename: str) -> str:
 
 
 def test_tagger():
-    tagger = TaggerPlugin()
+    tagger = PromptGenerationPlugin()
     content = _read_test_file('roses.txt')
     file = File(id="foo", blocks=[Block(text=content, tags=[])])
     request = PluginRequest(data=BlockAndTagPluginInput(file=file))
@@ -30,8 +28,8 @@ def test_tagger():
     assert (len(response.data.file.blocks) == 1)
 
     tags = response.data.file.blocks[0].tags
-    assert (len(tags) == 4)
+    assert (len(tags) == 1)
     for tag in tags:
-        assert (tag.kind == TagKind.DOCUMENT)
-        assert (tag.name == DocTag.SENTENCE)
-        assert (content[tag.start_idx:tag.end_idx] in WANT_SENTENCES)
+        assert (tag.kind == TagKind.GENERATION)
+        assert (tag.name == GenerationTag.PROMPT_COMPLETION)
+        assert tag.value == {TagValue.STRING_VALUE: "Oogyboo"}
