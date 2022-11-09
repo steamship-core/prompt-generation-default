@@ -1,0 +1,7 @@
+.venv
+.idea
+.DS_Store
+build/
+.ipynb_checkpoints/
+.pytest_cache/
+__pycache__/

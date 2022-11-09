@@ -1,0 +1,30 @@
+{
+  "type": "plugin",
+  "handle": "",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "entrypoint": "src.api.handler",
+  "plugin": {
+    "isTrainable": false,
+    "transport": "jsonOverHttp",
+    "type": "tagger"
+  },
+  "steamshipRegistry": {
+    "tagline": "",
+    "tagline2": "",
+    "usefulFor": "",
+    "videoUrl": null,
+    "githubUrl": "",
+    "demoUrl": null,
+    "blogUrl": null,
+    "jupyterUrl": null,
+    "authorName": "",
+    "authorEmail": "",
+    "authorTwitter": "",
+    "authorUrl": "",
+    "tags": [
+      "NLP"
+    ]
+  }
+}
