@@ -1,8 +1,9 @@
 """ Default generation plugin for prompts.
 """
-from typing import Type
+from typing import Type, Dict, Any
 
-from steamship import Block, SteamshipError, Tag, DocTag, File
+import openai
+from steamship import Block, SteamshipError, Tag, DocTag, File, Steamship
 from steamship.data import TagKind, GenerationTag, TagValue
 from steamship.invocable import Config, InvocableResponse, create_handler
 from steamship.plugin.tagger import Tagger
@@ -19,9 +20,19 @@ class PromptGenerationPlugin(Tagger):
         max_words : int
 
 
+    def config_cls(self) -> Type[Config]:
+        return self.PromptGenerationPluginConfig
+
+    config: PromptGenerationPluginConfig
+
+    def __init__(self, client: Steamship = None, config: Dict[str, Any] = None):
+        super().__init__(client, config)
+        openai.api_key = self.config.openai_api_key
+
     def _generate_text_for(self, text_prompt: str) -> str:
         """Call the API to generate the next section of text."""
-        return "Oogyboo"
+        completion = openai.Completion.create(engine="text-davinci-002", prompt=text_prompt)
+        return completion.choices[0].text
 
 
     def run(self, request: PluginRequest[BlockAndTagPluginInput]) -> InvocableResponse[BlockAndTagPluginOutput]:

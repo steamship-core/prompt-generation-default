@@ -1,3 +1,5 @@
+import json
+
 from steamship.data import TagKind, GenerationTag, TagValue
 from steamship.plugin.inputs.block_and_tag_plugin_input import BlockAndTagPluginInput
 
@@ -15,7 +17,10 @@ def _read_test_file(filename: str) -> str:
 
 
 def test_tagger():
-    tagger = PromptGenerationPlugin()
+    with open('../config.json') as config_file:
+        config = json.load(config_file)
+
+    tagger = PromptGenerationPlugin(config=config)
     content = _read_test_file('roses.txt')
     file = File(id="foo", blocks=[Block(text=content, tags=[])])
     request = PluginRequest(data=BlockAndTagPluginInput(file=file))
@@ -32,4 +37,4 @@ def test_tagger():
     for tag in tags:
         assert (tag.kind == TagKind.GENERATION)
         assert (tag.name == GenerationTag.PROMPT_COMPLETION)
-        assert tag.value == {TagValue.STRING_VALUE: "Oogyboo"}
+        assert tag.value == {TagValue.STRING_VALUE.value: "Oogyboo"}
