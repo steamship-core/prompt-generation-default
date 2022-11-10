@@ -1,14 +1,26 @@
 {
   "type": "plugin",
   "handle": "prompt-generation-default",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "platform": "linux",
   "description": "",
   "author": "",
+  "public": true,
   "entrypoint": "src.api.handler",
   "plugin": {
     "isTrainable": false,
     "transport": "jsonOverHttp",
     "type": "tagger"
+  },
+  "configTemplate": {
+    "openai_api_key": {
+      "type": "string",
+      "description": "An openAI API key to use."
+    },
+    "max_words": {
+      "type": "number",
+      "description": "The maximum number of words to generate per request"
+    }
   },
   "steamshipRegistry": {
     "tagline": "",

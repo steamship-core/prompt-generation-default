@@ -56,3 +56,6 @@ class PromptGenerationPlugin(Tagger):
 
 
 handler = create_handler(PromptGenerationPlugin)
+
+
+from aws_lambda_builders.workflows.python_pip.packager import PythonPipDependencyBuilder

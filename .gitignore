@@ -7,3 +7,5 @@ build/
 __pycache__/
 /config.json
 venv
+lb_build/
+lb_scratch/

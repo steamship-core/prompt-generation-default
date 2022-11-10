@@ -16,7 +16,7 @@ client = Steamship()
 generator = client.use_plugin(plugin_handle='prompt-generation-default')
 ...
 file: File
-file.tag(plugin_instance=generator.handle)
+file.tag(plugin_instance=generator.handle).wait()
 file.refresh()
 ```
  

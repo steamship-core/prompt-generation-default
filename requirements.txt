@@ -1,2 +1,2 @@
 git+ssh://git@github.com/steamship-core/python-client.git@main#egg=steamship
-openai==0.25.0
+openai
