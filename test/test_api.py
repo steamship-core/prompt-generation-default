@@ -46,16 +46,16 @@ def test_deployed_tagger():
     with open('../config.json') as config_file:
         config = json.load(config_file)
 
-    tagger = client.use_plugin(plugin_handle='prompt-generation-default', config=config)
+    tagger = client.use_plugin(plugin_handle='prompt-generation-default', instance_handle="15", version="0.0.15", config=config)
     content = _read_test_file('roses.txt')
     file = File.create(client, blocks=[Block.CreateRequest(text=content)])
     file.tag(plugin_instance=tagger.handle).wait()
     file = file.refresh()
-    response = tagger.run(request)
+
 
     assert (len(file.blocks) == 1)
 
-    tags = response.data.file.blocks[0].tags
+    tags = file.blocks[0].tags
     assert len(tags) == 1
     tag = tags[0]
     assert tag.kind == TagKind.GENERATION
