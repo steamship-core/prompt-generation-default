@@ -29,3 +29,8 @@ For each `Block` in the `File`, the tagger will produce an additional `Tag` with
 
  * __max_words__ - The maximum number of tokens to generate after the prompt
 
+##TODOS
+ * actually pass the max_words param
+ * Capture output scores
+ * Param for # of alternatives
+
