@@ -1,7 +1,7 @@
 {
   "type": "plugin",
   "handle": "prompt-generation-default",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "platform": "linux",
   "description": "",
   "author": "",
@@ -20,6 +20,11 @@
     "max_words": {
       "type": "number",
       "description": "The maximum number of words to generate per request"
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Controls randomness. Lower values produce higher likelihood / more predictable results; higher values produce more variety. Values between 0-1.",
+      "default": 0.4
     }
   },
   "steamshipRegistry": {

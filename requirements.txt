@@ -1,2 +1,2 @@
-steamship==2.2.1b0
-openai
+steamship==2.2.1rc0
+openai==0.25.0

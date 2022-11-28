@@ -46,7 +46,7 @@ def test_deployed_tagger():
     with open('../config.json') as config_file:
         config = json.load(config_file)
 
-    tagger = client.use_plugin(plugin_handle='prompt-generation-default', instance_handle="15", version="0.0.15", config=config)
+    tagger = client.use_plugin(plugin_handle='prompt-generation-default', instance_handle="17", version="0.0.17", config=config)
     content = _read_test_file('roses.txt')
     file = File.create(client, blocks=[Block.CreateRequest(text=content)])
     file.tag(plugin_instance=tagger.handle).wait()
