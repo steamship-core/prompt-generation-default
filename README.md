@@ -28,9 +28,10 @@ For each `Block` in the `File`, the tagger will produce an additional `Tag` with
 ## Parameters
 
  * __max_words__ - The maximum number of tokens to generate after the prompt
+ * __temperature__ - Controls randomness. Lower values produce higher likelihood / more predictable results; higher values produce more variety. Values between 0-1.
+ * __openai_api_key__ - OpenAI API key.
 
 ##TODOS
- * actually pass the max_words param
  * Capture output scores
  * Param for # of alternatives
 
