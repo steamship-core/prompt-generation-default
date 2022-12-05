@@ -9,3 +9,4 @@ __pycache__/
 venv
 lb_build/
 lb_scratch/
+/src/.steamship/secrets.toml

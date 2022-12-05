@@ -1,7 +1,7 @@
 {
   "type": "plugin",
   "handle": "prompt-generation-default",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "platform": "linux",
   "description": "",
   "author": "",
@@ -15,7 +15,8 @@
   "configTemplate": {
     "openai_api_key": {
       "type": "string",
-      "description": "An openAI API key to use."
+      "description": "An openAI API key to use. If left default, will use Steamship's API key.",
+      "default": ""
     },
     "max_words": {
       "type": "number",
