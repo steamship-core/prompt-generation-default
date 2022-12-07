@@ -3,7 +3,7 @@
   "handle": "prompt-generation-default",
   "version": "0.0.22",
   "platform": "linux",
-  "description": "Complete prompts and generate text.",
+  "description": "Complete prompts and generate text with OpenAI.",
   "author": "",
   "public": true,
   "entrypoint": "src.api.handler",
