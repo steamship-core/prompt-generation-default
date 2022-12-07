@@ -18,6 +18,8 @@ class PromptGenerationPlugin(Tagger):
     class PromptGenerationPluginConfig(Config):
         openai_api_key : str
         max_words : int
+        temperature : float
+        model: str
 
 
     def config_cls(self) -> Type[Config]:
@@ -31,15 +33,12 @@ class PromptGenerationPlugin(Tagger):
 
     def _generate_text_for(self, text_prompt: str) -> str:
         """Call the API to generate the next section of text."""
-        completion = openai.Completion.create(engine="text-davinci-002", prompt=text_prompt)
+        completion = openai.Completion.create(engine=self.config.model, prompt=text_prompt, temperature=self.config.temperature, max_tokens=self.config.max_words)
         return completion.choices[0].text
 
 
     def run(self, request: PluginRequest[BlockAndTagPluginInput]) -> InvocableResponse[BlockAndTagPluginOutput]:
-        """Every plugin implements a `run` function.
-
-        This template plugin does an extremely simple form of text tagging. It generates tags for all sentences
-        (based on ANY period that it sees) in the text blocks it sees. It also assumes no repetition in sentences.
+        """Run the text generator against all Blocks of text.
         """
 
 
@@ -54,5 +53,3 @@ class PromptGenerationPlugin(Tagger):
 
         return InvocableResponse(data=output)
 
-
-handler = create_handler(PromptGenerationPlugin)

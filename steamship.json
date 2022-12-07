@@ -1,14 +1,37 @@
 {
   "type": "plugin",
   "handle": "prompt-generation-default",
-  "version": "0.0.1",
+  "version": "0.0.21",
+  "platform": "linux",
   "description": "",
   "author": "",
+  "public": true,
   "entrypoint": "src.api.handler",
   "plugin": {
     "isTrainable": false,
     "transport": "jsonOverHttp",
     "type": "tagger"
+  },
+  "configTemplate": {
+    "openai_api_key": {
+      "type": "string",
+      "description": "An openAI API key to use. If left default, will use Steamship's API key.",
+      "default": ""
+    },
+    "max_words": {
+      "type": "number",
+      "description": "The maximum number of words to generate per request"
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Controls randomness. Lower values produce higher likelihood / more predictable results; higher values produce more variety. Values between 0-1.",
+      "default": 0.4
+    },
+    "model": {
+      "type": "string",
+      "description": "The OpenAI model to use.  Can be a pre-existing fine-tuned model.",
+      "default": "text-davinci-002"
+    }
   },
   "steamshipRegistry": {
     "tagline": "",

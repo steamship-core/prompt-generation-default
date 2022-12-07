@@ -7,3 +7,4 @@ build/
 __pycache__/
 /config.json
 venv
+src/.steamship/secrets.toml
