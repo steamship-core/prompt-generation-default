@@ -3,7 +3,7 @@
   "handle": "prompt-generation-default",
   "version": "0.0.22",
   "platform": "linux",
-  "description": "",
+  "description": "Complete prompts and generate text.",
   "author": "",
   "public": true,
   "entrypoint": "src.api.handler",
@@ -34,20 +34,21 @@
     }
   },
   "steamshipRegistry": {
-    "tagline": "",
-    "tagline2": "",
-    "usefulFor": "",
+    "tagline": "Complete prompts and generate text.",
+    "tagline2": "Combine with other models and SteamshipQL to add memory.",
+    "usefulFor": "Adding on-demand replies and suggestions to users.",
     "videoUrl": null,
-    "githubUrl": "",
+    "githubUrl": "https://github.com/steamship-plugins/prompt-generation-default",
     "demoUrl": null,
     "blogUrl": null,
     "jupyterUrl": null,
-    "authorName": "",
-    "authorEmail": "",
+    "authorName": "dkolas",
+    "authorEmail": "developers@steamship.com",
     "authorTwitter": "",
     "authorUrl": "",
+    "authorGithub": "dkolas",
     "tags": [
-      "NLP"
+      "NLP", "OpenAI", "GPT-3", "Prompt Completion", "LLM", "GPT"
     ]
   }
 }
