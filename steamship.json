@@ -1,7 +1,7 @@
 {
   "type": "plugin",
   "handle": "prompt-generation-default",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "platform": "linux",
   "description": "",
   "author": "",
