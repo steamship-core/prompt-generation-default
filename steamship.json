@@ -1,7 +1,7 @@
 {
   "type": "plugin",
   "handle": "prompt-generation-default",
-  "version": "0.0.22",
+  "version": "0.0.24",
   "platform": "linux",
   "description": "Complete prompts and generate text with OpenAI.",
   "author": "",
@@ -48,7 +48,12 @@
     "authorUrl": "",
     "authorGithub": "dkolas",
     "tags": [
-      "NLP", "OpenAI", "GPT-3", "Prompt Completion", "LLM", "GPT"
+      "NLP",
+      "OpenAI",
+      "GPT-3",
+      "Prompt Completion",
+      "LLM",
+      "GPT"
     ]
   }
 }
