@@ -1,8 +1,8 @@
 import json
 from pathlib import Path
 
-from steamship import File, Block, TaskState
-from steamship.data import TagKind, GenerationTag, TagValueKey
+from steamship import Block, File, TaskState
+from steamship.data import GenerationTag, TagKind, TagValueKey
 from steamship.plugin.inputs.block_and_tag_plugin_input import BlockAndTagPluginInput
 from steamship.plugin.request import PluginRequest
 
@@ -25,9 +25,9 @@ def test_tagger():
     assert len(response.data.file.blocks) == 1
 
     tags = response.data.file.blocks[0].tags
-    assert (len(tags) == config.get("best_of", 1))
+    assert len(tags) == config.get("best_of", 1)
     for tag in tags:
-        assert (tag.kind == TagKind.GENERATION)
-        assert (tag.name == GenerationTag.PROMPT_COMPLETION)
+        assert tag.kind == TagKind.GENERATION
+        assert tag.name == GenerationTag.PROMPT_COMPLETION
         assert TagValueKey.STRING_VALUE.value is not None
         assert isinstance(TagValueKey.STRING_VALUE.value, str)

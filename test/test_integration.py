@@ -5,8 +5,8 @@ import string
 from pathlib import Path
 
 import pytest
-from steamship import File, PluginInstance, Steamship, TaskState, Block
-from steamship.data import TagKind, GenerationTag, TagValueKey
+from steamship import Block, File, PluginInstance, Steamship, TaskState
+from steamship.data import GenerationTag, TagKind, TagValueKey
 
 BLOCKIFIER_HANDLE = "gpt-3"
 ENVIRONMENT = "prod"
@@ -55,11 +55,10 @@ def test_generator(steamship: Steamship, plugin_instance: PluginInstance):
     assert file is not None
     assert file.blocks is not None
     assert len(file.blocks) == 1
-
     tags = file.blocks[0].tags
-    assert (len(tags) == 1)
+    assert len(tags) == json.load(Path("config.json").open()).get("best_of", 1)
     for tag in tags:
-        assert (tag.kind == TagKind.GENERATION)
-        assert (tag.name == GenerationTag.PROMPT_COMPLETION)
+        assert tag.kind == TagKind.GENERATION
+        assert tag.name == GenerationTag.PROMPT_COMPLETION
         assert TagValueKey.STRING_VALUE.value is not None
         assert isinstance(TagValueKey.STRING_VALUE.value, str)

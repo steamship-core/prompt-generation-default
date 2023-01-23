@@ -1,9 +1,9 @@
 """Default generation plugin for prompts."""
-from typing import Type, Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional, Type
 
 import openai
-from steamship import Tag, Steamship
-from steamship.data import TagKind, GenerationTag, TagValueKey
+from steamship import Steamship, Tag
+from steamship.data import GenerationTag, TagKind, TagValueKey
 from steamship.invocable import Config, InvocableResponse, InvocationContext
 from steamship.plugin.inputs.block_and_tag_plugin_input import BlockAndTagPluginInput
 from steamship.plugin.outputs.block_and_tag_plugin_output import BlockAndTagPluginOutput
@@ -33,9 +33,11 @@ class PromptGenerationPlugin(Tagger):
         best_of: Optional[int] = 1
 
         def __init__(self, **kwargs):
-            kwargs["stop"] = kwargs["stop"].split(",") if kwargs["stop"] is not None and isinstance(kwargs["stop"],
-                                                                                                    str) else kwargs[
-                "stop"]
+            kwargs["stop"] = (
+                kwargs["stop"].split(",")
+                if kwargs["stop"] is not None and isinstance(kwargs["stop"], str)
+                else kwargs["stop"]
+            )
             super().__init__(**kwargs)
 
     def config_cls(self) -> Type[Config]:
@@ -43,12 +45,18 @@ class PromptGenerationPlugin(Tagger):
 
     config: PromptGenerationPluginConfig
 
-    def __init__(self, client: Steamship = None, config: Dict[str, Any] = None, context: InvocationContext = None,
-                 ):
+    def __init__(
+        self,
+        client: Steamship = None,
+        config: Dict[str, Any] = None,
+        context: InvocationContext = None,
+    ):
         super().__init__(client, config, context)
         openai.api_key = self.config.openai_api_key
 
-    def _complete_text(self, text_prompt: str, suffix: Optional[str] = None, user: Optional[str] = None) -> List[str]:
+    def _complete_text(
+        self, text_prompt: str, suffix: Optional[str] = None, user: Optional[str] = None
+    ) -> List[str]:
         """Call the API to generate the next section of text."""
         completion = openai.Completion.create(
             prompt=text_prompt,
@@ -59,7 +67,6 @@ class PromptGenerationPlugin(Tagger):
             temperature=self.config.temperature,
             top_p=self.config.top_p,
             n=self.config.n_completions,
-            logprobs=self.config.logprobs,
             echo=self.config.echo,
             stop=self.config.stop,
             presence_penalty=self.config.presence_penalty,
@@ -68,18 +75,21 @@ class PromptGenerationPlugin(Tagger):
         )
         return [choice.text for choice in completion.choices]
 
-    def run(self, request: PluginRequest[BlockAndTagPluginInput]) -> InvocableResponse[BlockAndTagPluginOutput]:
-        """Run the text generator against all Blocks of text.
-        """
+    def run(
+        self, request: PluginRequest[BlockAndTagPluginInput]
+    ) -> InvocableResponse[BlockAndTagPluginOutput]:
+        """Run the text generator against all Blocks of text."""
 
         file = request.data.file
         for block in request.data.file.blocks:
             generated_texts = self._complete_text(block.text)
             for generated_text in generated_texts:
-                block.tags.append(Tag(kind=TagKind.GENERATION,
-                                      name=GenerationTag.PROMPT_COMPLETION,
-                                      value={TagValueKey.STRING_VALUE: generated_text}))
+                block.tags.append(
+                    Tag(
+                        kind=TagKind.GENERATION,
+                        name=GenerationTag.PROMPT_COMPLETION,
+                        value={TagValueKey.STRING_VALUE: generated_text},
+                    )
+                )
 
-        return InvocableResponse(data=BlockAndTagPluginOutput(
-            file=file
-        ))
+        return InvocableResponse(data=BlockAndTagPluginOutput(file=file))
