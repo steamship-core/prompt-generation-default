@@ -1,7 +1,7 @@
 {
   "type": "plugin",
-  "handle": "prompt-generation-default",
-  "version": "0.0.22",
+  "handle": "gpt-3",
+  "version": "0.0.8",
   "platform": "linux",
   "description": "Complete prompts and generate text with OpenAI.",
   "author": "",
@@ -31,6 +31,41 @@
       "type": "string",
       "description": "The OpenAI model to use.  Can be a pre-existing fine-tuned model.",
       "default": "text-davinci-002"
+    },
+    "top_p": {
+      "type": "number",
+      "description": "Controls the nucleus sampling, where the model considers the results of the tokens with top_p probability mass. Values between 0-1.",
+      "default": 1
+    },
+    "n_completions": {
+      "type": "number",
+      "description": "How many completions to generate for each prompt.",
+      "default": 1
+    },
+    "echo": {
+      "type": "boolean",
+      "description": "Echo back the prompt in addition to the completion",
+      "default": false
+    },
+    "stop": {
+      "type": "string",
+      "description": "Up to 4 sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence. Value is comma separated string version of the sequence.",
+      "default": ""
+    },
+    "presence_penalty": {
+      "type": "number",
+      "description": "Control how likely the model will reuse words. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics. Number between -2.0 and 2.0.",
+      "default": 0
+    },
+    "frequency_penalty": {
+      "type": "number",
+      "description": "Control how likely the model will reuse words. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim. Number between -2.0 and 2.0.",
+      "default": 0
+    },
+    "best_of": {
+      "type": "number",
+      "description": "Generates best_of completions server-side and returns the \"best\" (the one with the highest log probability per token).",
+      "default": 1
     }
   },
   "steamshipRegistry": {
@@ -48,7 +83,12 @@
     "authorUrl": "",
     "authorGithub": "dkolas",
     "tags": [
-      "NLP", "OpenAI", "GPT-3", "Prompt Completion", "LLM", "GPT"
+      "NLP",
+      "OpenAI",
+      "GPT-3",
+      "Prompt Completion",
+      "LLM",
+      "GPT"
     ]
   }
 }
