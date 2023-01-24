@@ -8,7 +8,7 @@ import pytest
 from steamship import Block, File, PluginInstance, Steamship, TaskState
 from steamship.data import GenerationTag, TagKind, TagValueKey
 
-BLOCKIFIER_HANDLE = "gpt-3"
+GENERATOR_HANDLE = "gpt-3"
 ENVIRONMENT = "prod"
 
 
@@ -31,7 +31,7 @@ def random_name() -> str:
 def plugin_instance(steamship: Steamship) -> PluginInstance:
     """Instantiate a plugin instance."""
     plugin_instance = steamship.use_plugin(
-        plugin_handle=BLOCKIFIER_HANDLE,
+        plugin_handle=GENERATOR_HANDLE,
         instance_handle=random_name(),
         config=json.load(Path("config.json").open()),
         fetch_if_exists=False,
