@@ -1,0 +1,7 @@
+{
+  "max_words" : 100,
+  "openai_api_key" : "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",
+  "stop": "tst,test",
+  "n_completions": 2,
+  "best_of": 2
+}
