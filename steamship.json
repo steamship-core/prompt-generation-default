@@ -1,97 +1,101 @@
 {
-	"type": "plugin",
-	"handle": "gpt-3",
-	"version": "0.0.8",
-	"description": "Complete prompts and generate text with OpenAI.",
-	"author": "",
-	"entrypoint": "src.api.handler",
-	"public": true,
-	"plugin": {
-		"isTrainable": false,
-		"transport": "jsonOverHttp",
-		"type": "tagger"
-	},
-	"build_config": {
-		"ignore": []
-	},
-	"configTemplate": {
-		"openai_api_key": {
-			"type": "string",
-			"description": "An openAI API key to use. If left default, will use Steamship's API key.",
-			"default": ""
-		},
-		"max_words": {
-			"type": "number",
-			"description": "The maximum number of words to generate per request",
-			"default": null
-		},
-		"model": {
-			"type": "string",
-			"description": "The OpenAI model to use.  Can be a pre-existing fine-tuned model.",
-			"default": "text-davinci-002"
-		},
-		"temperature": {
-			"type": "number",
-			"description": "Controls randomness. Lower values produce higher likelihood / more predictable results; higher values produce more variety. Values between 0-1.",
-			"default": 0.4
-		},
-		"top_p": {
-			"type": "number",
-			"description": "Controls the nucleus sampling, where the model considers the results of the tokens with top_p probability mass. Values between 0-1.",
-			"default": 1
-		},
-		"n_completions": {
-			"type": "number",
-			"description": "How many completions to generate for each prompt.",
-			"default": 1
-		},
-		"echo": {
-			"type": "boolean",
-			"description": "Echo back the prompt in addition to the completion",
-			"default": false
-		},
-		"stop": {
-			"type": "string",
-			"description": "Up to 4 sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence. Value is comma separated string version of the sequence.",
-			"default": ""
-		},
-		"presence_penalty": {
-			"type": "number",
-			"description": "Control how likely the model will reuse words. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics. Number between -2.0 and 2.0.",
-			"default": 0
-		},
-		"frequency_penalty": {
-			"type": "number",
-			"description": "Control how likely the model will reuse words. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim. Number between -2.0 and 2.0.",
-			"default": 0
-		},
-		"best_of": {
-			"type": "number",
-			"description": "Generates best_of completions server-side and returns the \"best\" (the one with the highest log probability per token).",
-			"default": 1
-		}
-	},
-	"steamshipRegistry": {
-		"tagline": "Complete prompts and generate text.",
-		"tagline2": "Combine with other models and SteamshipQL to add memory.",
-		"usefulFor": "Adding on-demand replies and suggestions to users.",
-		"videoUrl": null,
-		"githubUrl": "https://github.com/steamship-plugins/prompt-generation-default",
-		"demoUrl": null,
-		"blogUrl": null,
-		"jupyterUrl": null,
-		"authorGithub": "dkolas",
-		"authorName": "dkolas",
-		"authorEmail": "developers@steamship.com",
-		"authorTwitter": "",
-		"authorUrl": "",
-		"tags": [
-			"NLP",
-			"OpenAI",
-			"GPT-3",
-			"Prompt Completion",
-			"LLM",
-			"GPT"
-		]
-	}
+  "type": "plugin",
+  "handle": "gpt-3",
+  "version": "0.0.8",
+  "description": "Complete prompts and generate text with OpenAI.",
+  "author": "",
+  "entrypoint": "src.api.handler",
+  "public": true,
+  "plugin": {
+    "isTrainable": false,
+    "transport": "jsonOverHttp",
+    "type": "tagger"
+  },
+  "build_config": {
+    "ignore": []
+  },
+  "configTemplate": {
+    "openai_api_key": {
+      "type": "string",
+      "description": "An openAI API key to use. If left default, will use Steamship's API key.",
+      "default": ""
+    },
+    "max_words": {
+      "type": "number",
+      "description": "The maximum number of words to generate per request"
+    },
+    "model": {
+      "type": "string",
+      "description": "The OpenAI model to use.  Can be a pre-existing fine-tuned model.",
+      "default": "text-davinci-002"
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Controls randomness. Lower values produce higher likelihood / more predictable results; higher values produce more variety. Values between 0-1.",
+      "default": 0.4
+    },
+    "top_p": {
+      "type": "number",
+      "description": "Controls the nucleus sampling, where the model considers the results of the tokens with top_p probability mass. Values between 0-1.",
+      "default": 1
+    },
+    "n_completions": {
+      "type": "number",
+      "description": "How many completions to generate for each prompt.",
+      "default": 1
+    },
+    "echo": {
+      "type": "boolean",
+      "description": "Echo back the prompt in addition to the completion",
+      "default": false
+    },
+    "stop": {
+      "type": "string",
+      "description": "Up to 4 sequences where the API will stop generating further tokens. The returned text will not contain the stop sequence. Value is comma separated string version of the sequence.",
+      "default": ""
+    },
+    "presence_penalty": {
+      "type": "number",
+      "description": "Control how likely the model will reuse words. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics. Number between -2.0 and 2.0.",
+      "default": 0
+    },
+    "frequency_penalty": {
+      "type": "number",
+      "description": "Control how likely the model will reuse words. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim. Number between -2.0 and 2.0.",
+      "default": 0
+    },
+    "best_of": {
+      "type": "number",
+      "description": "Generates best_of completions server-side and returns the \"best\" (the one with the highest log probability per token).",
+      "default": 1
+    },
+    "moderate_output": {
+      "type": "boolean",
+      "description": "Pass the generated output back through OpenAI's moderation endpoint and throw an exception if flagged.",
+      "default": true
+    }
+  },
+  "steamshipRegistry": {
+    "tagline": "Complete prompts and generate text.",
+    "tagline2": "Combine with other models and SteamshipQL to add memory.",
+    "usefulFor": "Adding on-demand replies and suggestions to users.",
+    "videoUrl": null,
+    "githubUrl": "https://github.com/steamship-plugins/prompt-generation-default",
+    "demoUrl": null,
+    "blogUrl": null,
+    "jupyterUrl": null,
+    "authorGithub": "dkolas",
+    "authorName": "dkolas",
+    "authorEmail": "developers@steamship.com",
+    "authorTwitter": "",
+    "authorUrl": "",
+    "tags": [
+      "NLP",
+      "OpenAI",
+      "GPT-3",
+      "Prompt Completion",
+      "LLM",
+      "GPT"
+    ]
+  }
 }

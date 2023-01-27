@@ -1,9 +1,10 @@
 """Default generation plugin for prompts."""
+import logging
 from typing import Any, Dict, List, Optional, Type
 
 import openai
 from pydantic import Field
-from steamship import Steamship, Tag
+from steamship import Steamship, Tag, SteamshipError
 from steamship.data import GenerationTag, TagKind, TagValueKey
 from steamship.invocable import Config, InvocableResponse, InvocationContext
 from steamship.plugin.inputs.block_and_tag_plugin_input import BlockAndTagPluginInput
@@ -32,14 +33,7 @@ class PromptGenerationPlugin(Tagger):
         presence_penalty: Optional[int] = Field(0, description="Control how likely the model will reuse words. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics. Number between -2.0 and 2.0.")
         frequency_penalty: Optional[int] = Field(0, description="Control how likely the model will reuse words. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim. Number between -2.0 and 2.0.")
         best_of: Optional[int] = Field(1, description="Generates best_of completions server-side and returns the \"best\" (the one with the highest log probability per token).")
-
-        def __init__(self, **kwargs):
-            kwargs["stop"] = (
-                kwargs["stop"].split(",")
-                if kwargs["stop"] is not None and isinstance(kwargs["stop"], str)
-                else kwargs["stop"]
-            )
-            super().__init__(**kwargs)
+        moderate_output: bool = Field(True, description="Pass the generated output back through OpenAI's moderation endpoint and throw an exception if flagged.")
 
     @classmethod
     def config_cls(cls) -> Type[Config]:
@@ -59,6 +53,11 @@ class PromptGenerationPlugin(Tagger):
     def _complete_text(
         self, text_prompt: str, suffix: Optional[str] = None, user: Optional[str] = None
     ) -> List[str]:
+
+        stopwords = self.config.stop.split(",") \
+            if self.config.stop is not None and self.config.stop != "" \
+            else None
+        logging.info(f"Making OpenAI generation call on behalf of user with id: {user}")
         """Call the API to generate the next section of text."""
         completion = openai.Completion.create(
             prompt=text_prompt,
@@ -70,12 +69,17 @@ class PromptGenerationPlugin(Tagger):
             top_p=self.config.top_p,
             n=self.config.n_completions,
             echo=self.config.echo,
-            stop=self.config.stop,
+            stop=stopwords,
             presence_penalty=self.config.presence_penalty,
             frequency_penalty=self.config.frequency_penalty,
             best_of=self.config.best_of,
         )
         return [choice.text for choice in completion.choices]
+
+    def _flagged(self, responses: List[str]) -> bool:
+        input_text = "\n\n".join(responses)
+        moderation = openai.Moderation.create(input=input_text)
+        return moderation['results'][0]['flagged']
 
     def run(
         self, request: PluginRequest[BlockAndTagPluginInput]
@@ -84,7 +88,10 @@ class PromptGenerationPlugin(Tagger):
 
         file = request.data.file
         for block in request.data.file.blocks:
-            generated_texts = self._complete_text(block.text)
+            user_id = self.context.user_id if self.context is not None else "testing"
+            generated_texts = self._complete_text(block.text, user=user_id)
+            if self.config.moderate_output and self._flagged(generated_texts):
+                raise SteamshipError("At least one of the responses was flagged as inappropriate by OpenAI. You may disable this behavior in the plugin by setting moderate_output=False in the PluginInstance config.")
             for generated_text in generated_texts:
                 block.tags.append(
                     Tag(
