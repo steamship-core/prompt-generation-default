@@ -24,7 +24,7 @@ class PromptGenerationPlugin(Tagger):
     class PromptGenerationPluginConfig(Config):
         openai_api_key: str = Field("", description="An openAI API key to use. If left default, will use Steamship's API key.")
         max_words: int = Field(description="The maximum number of words to generate per request")
-        model: Optional[str] = Field("text-davinci-002", description="The OpenAI model to use.  Can be a pre-existing fine-tuned model.")
+        model: Optional[str] = Field("text-davinci-003", description="The OpenAI model to use.  Can be a pre-existing fine-tuned model.")
         temperature: Optional[float] = Field(0.4, description="Controls randomness. Lower values produce higher likelihood / more predictable results; higher values produce more variety. Values between 0-1.")
         top_p: Optional[int] = Field(1, description="Controls the nucleus sampling, where the model considers the results of the tokens with top_p probability mass. Values between 0-1.")
         n_completions: Optional[int] = Field(1, description="How many completions to generate for each prompt.")

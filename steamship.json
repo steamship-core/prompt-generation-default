@@ -27,7 +27,7 @@
     "model": {
       "type": "string",
       "description": "The OpenAI model to use.  Can be a pre-existing fine-tuned model.",
-      "default": "text-davinci-002"
+      "default": "text-davinci-003"
     },
     "temperature": {
       "type": "number",
