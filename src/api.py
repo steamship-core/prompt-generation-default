@@ -22,7 +22,7 @@ class PromptGenerationPlugin(Tagger):
     class PromptGenerationPluginConfig(Config):
         openai_api_key: str
         max_words: int
-        model: Optional[str] = "text-davinci-002"
+        model: Optional[str] = "text-davinci-003"
         temperature: Optional[float] = 0.4
         top_p: Optional[int] = 1
         n_completions: Optional[int] = 1
