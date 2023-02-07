@@ -51,8 +51,8 @@ class PromptGenerationPlugin(Tagger):
         openai.api_key = self.config.openai_api_key
 
     def _complete_text(
-        self, text_prompt: str, suffix: Optional[str] = None, user: Optional[str] = None
-    ) -> List[str]:
+        self, text_prompts: List[str], suffix: Optional[str] = None, user: Optional[str] = None
+    ) -> List[List[str]]:
 
         stopwords = self.config.stop.split(",") \
             if self.config.stop is not None and self.config.stop != "" \
@@ -60,7 +60,7 @@ class PromptGenerationPlugin(Tagger):
         logging.info(f"Making OpenAI generation call on behalf of user with id: {user}")
         """Call the API to generate the next section of text."""
         completion = openai.Completion.create(
-            prompt=text_prompt,
+            prompt=text_prompts,
             suffix=suffix,
             user=user or "",
             max_tokens=self.config.max_words,
@@ -74,10 +74,13 @@ class PromptGenerationPlugin(Tagger):
             frequency_penalty=self.config.frequency_penalty,
             best_of=self.config.best_of,
         )
-        return [choice.text for choice in completion.choices]
+        result = []
+        for i in range(0, len(completion.choices), self.config.n_completions):
+            result.append([choice.text for choice in completion.choices[i:i+self.config.n_completions]])
+        return result
 
-    def _flagged(self, responses: List[str]) -> bool:
-        input_text = "\n\n".join(responses)
+    def _flagged(self, responses: List[List[str]]) -> bool:
+        input_text = "\n\n".join([text for sublist in responses for text in sublist])
         moderation = openai.Moderation.create(input=input_text)
         return moderation['results'][0]['flagged']
 
@@ -87,17 +90,18 @@ class PromptGenerationPlugin(Tagger):
         """Run the text generator against all Blocks of text."""
 
         file = request.data.file
-        for block in request.data.file.blocks:
-            user_id = self.context.user_id if self.context is not None else "testing"
-            generated_texts = self._complete_text(block.text, user=user_id)
-            if self.config.moderate_output and self._flagged(generated_texts):
-                raise SteamshipError("At least one of the responses was flagged as inappropriate by OpenAI. You may disable this behavior in the plugin by setting moderate_output=False in the PluginInstance config.")
-            for generated_text in generated_texts:
+        prompts = [block.text for block in file.blocks]
+        user_id = self.context.user_id if self.context is not None else "testing"
+        generated_texts = self._complete_text(prompts, user=user_id)
+        if self.config.moderate_output and self._flagged(generated_texts):
+            raise SteamshipError("At least one of the responses was flagged as inappropriate by OpenAI. You may disable this behavior in the plugin by setting moderate_output=False in the PluginInstance config.")
+        for block, options in zip(file.blocks, generated_texts):
+            for option in options:
                 block.tags.append(
                     Tag(
                         kind=TagKind.GENERATION,
                         name=GenerationTag.PROMPT_COMPLETION,
-                        value={TagValueKey.STRING_VALUE: generated_text},
+                        value={TagValueKey.STRING_VALUE: option},
                     )
                 )
 
