@@ -2,15 +2,17 @@
   "type": "plugin",
   "handle": "gpt-3",
   "version": "0.0.8",
-  "platform": "linux",
   "description": "Complete prompts and generate text with OpenAI.",
   "author": "",
-  "public": true,
   "entrypoint": "src.api.handler",
+  "public": true,
   "plugin": {
     "isTrainable": false,
     "transport": "jsonOverHttp",
     "type": "tagger"
+  },
+  "build_config": {
+    "ignore": []
   },
   "configTemplate": {
     "openai_api_key": {
@@ -22,15 +24,15 @@
       "type": "number",
       "description": "The maximum number of words to generate per request"
     },
-    "temperature": {
-      "type": "number",
-      "description": "Controls randomness. Lower values produce higher likelihood / more predictable results; higher values produce more variety. Values between 0-1.",
-      "default": 0.4
-    },
     "model": {
       "type": "string",
       "description": "The OpenAI model to use.  Can be a pre-existing fine-tuned model.",
       "default": "text-davinci-003"
+    },
+    "temperature": {
+      "type": "number",
+      "description": "Controls randomness. Lower values produce higher likelihood / more predictable results; higher values produce more variety. Values between 0-1.",
+      "default": 0.4
     },
     "top_p": {
       "type": "number",
@@ -66,6 +68,11 @@
       "type": "number",
       "description": "Generates best_of completions server-side and returns the \"best\" (the one with the highest log probability per token).",
       "default": 1
+    },
+    "moderate_output": {
+      "type": "boolean",
+      "description": "Pass the generated output back through OpenAI's moderation endpoint and throw an exception if flagged.",
+      "default": true
     }
   },
   "steamshipRegistry": {
@@ -77,11 +84,11 @@
     "demoUrl": null,
     "blogUrl": null,
     "jupyterUrl": null,
+    "authorGithub": "dkolas",
     "authorName": "dkolas",
     "authorEmail": "developers@steamship.com",
     "authorTwitter": "",
     "authorUrl": "",
-    "authorGithub": "dkolas",
     "tags": [
       "NLP",
       "OpenAI",
