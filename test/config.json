@@ -1,6 +1,6 @@
 {
-  "max_words" : 100,
+  "max_tokens" : 100,
   "stop": "tst,test",
-  "n_completions": 2,
+  "n": 2,
   "best_of": 2
 }

@@ -1,10 +1,10 @@
 {
 	"type": "plugin",
-	"handle": "gpt-3",
-	"version": "0.0.11",
-	"description": "Complete prompts and generate text with OpenAI.",
-	"author": "",
-	"entrypoint": "src.api.handler",
+	"handle": "openai",
+	"version": "0.0.4",
+	"description": "",
+	"author": "Enias",
+	"entrypoint": "Unused",
 	"public": true,
 	"plugin": {
 		"isTrainable": false,
@@ -12,7 +12,10 @@
 		"type": "tagger"
 	},
 	"build_config": {
-		"ignore": []
+		"ignore": [
+			"tests",
+			"examples"
+		]
 	},
 	"configTemplate": {
 		"openai_api_key": {
@@ -20,12 +23,12 @@
 			"description": "An openAI API key to use. If left default, will use Steamship's API key.",
 			"default": ""
 		},
-		"max_words": {
+		"max_tokens": {
 			"type": "number",
-			"description": "The maximum number of words to generate per request",
+			"description": "The maximum number of tokens to generate per request",
 			"default": null
 		},
-		"model": {
+		"model_name": {
 			"type": "string",
 			"description": "The OpenAI model to use.  Can be a pre-existing fine-tuned model.",
 			"default": "text-davinci-003"
@@ -40,7 +43,7 @@
 			"description": "Controls the nucleus sampling, where the model considers the results of the tokens with top_p probability mass. Values between 0-1.",
 			"default": 1
 		},
-		"n_completions": {
+		"n": {
 			"type": "number",
 			"description": "How many completions to generate for each prompt.",
 			"default": 1
@@ -57,12 +60,12 @@
 		},
 		"presence_penalty": {
 			"type": "number",
-			"description": "Control how likely the model will reuse words. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics. Number between -2.0 and 2.0.",
+			"description": "Control how likely the model will reuse tokens. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics. Number between -2.0 and 2.0.",
 			"default": 0
 		},
 		"frequency_penalty": {
 			"type": "number",
-			"description": "Control how likely the model will reuse words. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim. Number between -2.0 and 2.0.",
+			"description": "Control how likely the model will reuse tokens. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim. Number between -2.0 and 2.0.",
 			"default": 0
 		},
 		"best_of": {
@@ -74,29 +77,35 @@
 			"type": "boolean",
 			"description": "Pass the generated output back through OpenAI's moderation endpoint and throw an exception if flagged.",
 			"default": true
+		},
+		"max_retries": {
+			"type": "number",
+			"description": "Maximum number of retries to make when generating.",
+			"default": 6
+		},
+		"request_timeout": {
+			"type": "number",
+			"description": "Timeout for requests to OpenAI completion API. Default is 600 seconds.",
+			"default": 600
 		}
 	},
 	"steamshipRegistry": {
-		"tagline": "Complete prompts and generate text.",
-		"tagline2": "Combine with other models and SteamshipQL to add memory.",
-		"usefulFor": "Adding on-demand replies and suggestions to users.",
+		"tagline": "Complete prompts and generate text with OpenAI.",
+		"tagline2": null,
+		"usefulFor": null,
 		"videoUrl": null,
-		"githubUrl": "https://github.com/steamship-plugins/prompt-generation-default",
+		"githubUrl": null,
 		"demoUrl": null,
 		"blogUrl": null,
 		"jupyterUrl": null,
-		"authorGithub": "dkolas",
-		"authorName": "dkolas",
-		"authorEmail": "developers@steamship.com",
-		"authorTwitter": "",
-		"authorUrl": "",
+		"authorGithub": "EniasCailliau",
+		"authorName": "steamship",
+		"authorEmail": null,
+		"authorTwitter": null,
+		"authorUrl": null,
 		"tags": [
-			"NLP",
-			"OpenAI",
-			"GPT-3",
-			"Prompt Completion",
-			"LLM",
-			"GPT"
+			"openai",
+			"gpt-3"
 		]
 	}
 }
