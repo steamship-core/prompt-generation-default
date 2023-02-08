@@ -1,7 +1,7 @@
 {
 	"type": "plugin",
 	"handle": "gpt-3",
-	"version": "0.0.12",
+	"version": "0.0.13",
 	"description": "",
 	"author": "",
 	"entrypoint": "src.api.handler",
@@ -81,7 +81,7 @@
 		"max_retries": {
 			"type": "number",
 			"description": "Maximum number of retries to make when generating.",
-			"default": 6
+			"default": 8
 		},
 		"request_timeout": {
 			"type": "number",

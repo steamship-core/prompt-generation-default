@@ -2,7 +2,7 @@
 import logging
 from collections import defaultdict
 from typing import Any, Dict, List, Optional, Type
-
+import json
 import openai
 from pydantic import Field
 from steamship import Steamship, Tag, SteamshipError
@@ -17,10 +17,9 @@ from tenacity import (
     retry,
     retry_if_exception_type,
     stop_after_attempt,
-    wait_exponential,
+    wait_exponential, before_sleep_log, wait_random_exponential, wait_exponential_jitter,
 )
 
-logger = logging.getLogger(__name__)
 
 
 class PromptGenerationPlugin(Tagger):
@@ -53,7 +52,7 @@ class PromptGenerationPlugin(Tagger):
                                        description="Generates best_of completions server-side and returns the \"best\" (the one with the highest log probability per token).")
         moderate_output: bool = Field(True,
                                       description="Pass the generated output back through OpenAI's moderation endpoint and throw an exception if flagged.")
-        max_retries: int = Field(6, description="Maximum number of retries to make when generating.")
+        max_retries: int = Field(8, description="Maximum number of retries to make when generating.")
         request_timeout: Optional[float] = Field(600,
                                                  description="Timeout for requests to OpenAI completion API. Default is 600 seconds.")
 
@@ -72,30 +71,31 @@ class PromptGenerationPlugin(Tagger):
         super().__init__(client, config, context)
         openai.api_key = self.config.openai_api_key
 
+
+
     def completion_with_retry(self, **kwargs: Any) -> Any:
         """Use tenacity to retry the completion call."""
-        min_seconds = 4
-        max_seconds = 10
 
-        # Wait 2^x * 1 second between each retry starting with
-        # 4 seconds, then up to 10 seconds, then 10 seconds afterwards
 
         @retry(
             reraise=True,
             stop=stop_after_attempt(self.config.max_retries),
-            wait=wait_exponential(multiplier=1, min=min_seconds, max=max_seconds),
+            wait=wait_exponential_jitter(jitter=5),
+            before_sleep=before_sleep_log(logging.root, logging.INFO),
             retry=(
                     retry_if_exception_type(openai.error.Timeout)
                     | retry_if_exception_type(openai.error.APIError)
                     | retry_if_exception_type(openai.error.APIConnectionError)
                     | retry_if_exception_type(openai.error.RateLimitError)
             ),
-            after=after_log(logger, logging.INFO),
+            after=after_log(logging.root, logging.INFO),
         )
         def _completion_with_retry(**kwargs: Any) -> Any:
             return openai.Completion.create(**kwargs)
 
-        return _completion_with_retry(**kwargs)
+        result =  _completion_with_retry(**kwargs)
+        logging.info("Retry statistics: "+ json.dumps(_completion_with_retry.retry.statistics))
+        return result
 
     @property
     def _default_params(self) -> Dict[str, Any]:
