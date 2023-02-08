@@ -46,8 +46,8 @@ def test_tagger():
 
 def test_tagger_multiblock():
     config = json.load(Path("config.json").open())
-    config['n'] = 3
-    config['best_of'] = config['n']
+    config['n_completions'] = 3
+    config['best_of'] = config['n_completions']
     tagger = PromptGenerationPlugin(config=config)
     file = File(id="foo",
                 blocks=[Block(text="Let's count: one two three"), Block(text="The primary colors are: red blue")])
@@ -60,10 +60,10 @@ def test_tagger_multiblock():
     assert response.data.file.blocks is not None
     assert len(response.data.file.blocks) == 2
 
-    assert len(response.data.file.blocks[0].tags) == config['n']
+    assert len(response.data.file.blocks[0].tags) == config['n_completions']
     first_block_completion = response.data.file.blocks[0].tags[0].value[TagValueKey.STRING_VALUE].lower()
     assert "four" in first_block_completion
 
-    assert len(response.data.file.blocks[1].tags) == config['n']
+    assert len(response.data.file.blocks[1].tags) == config['n_completions']
     second_block_completion = response.data.file.blocks[1].tags[0].value[TagValueKey.STRING_VALUE].lower()
     assert "yellow" in second_block_completion

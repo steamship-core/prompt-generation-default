@@ -1,6 +1,6 @@
 {
 	"type": "plugin",
-	"handle": "openai",
+	"handle": "dave-gpt3",
 	"version": "0.0.5",
 	"description": "",
 	"author": "",
