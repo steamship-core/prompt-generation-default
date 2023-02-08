@@ -1,7 +1,7 @@
 {
 	"type": "plugin",
 	"handle": "gpt-3",
-	"version": "0.0.6",
+	"version": "0.0.12",
 	"description": "",
 	"author": "",
 	"entrypoint": "src.api.handler",
