@@ -1,10 +1,10 @@
 {
 	"type": "plugin",
 	"handle": "openai",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "",
-	"author": "Enias",
-	"entrypoint": "Unused",
+	"author": "",
+	"entrypoint": "src.api.handler",
 	"public": true,
 	"plugin": {
 		"isTrainable": false,
@@ -94,18 +94,22 @@
 		"tagline2": null,
 		"usefulFor": null,
 		"videoUrl": null,
-		"githubUrl": null,
+		"githubUrl": "https://github.com/steamship-plugins/prompt-generation-default",
 		"demoUrl": null,
 		"blogUrl": null,
 		"jupyterUrl": null,
-		"authorGithub": "EniasCailliau",
-		"authorName": "steamship",
-		"authorEmail": null,
+		"authorGithub": "dkolas",
+		"authorName": "dkolas",
+		"authorEmail": "developers@steamship.com",
 		"authorTwitter": null,
 		"authorUrl": null,
 		"tags": [
-			"openai",
-			"gpt-3"
+			"NLP",
+			"OpenAI",
+			"GPT-3",
+			"Prompt Completion",
+			"LLM",
+			"GPT"
 		]
 	}
 }
