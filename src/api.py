@@ -90,7 +90,7 @@ class PromptGenerationPlugin(Tagger):
                     | retry_if_exception_type(openai.error.APIConnectionError)
                     | retry_if_exception_type(openai.error.RateLimitError)
             ),
-            after=after_log(logger, logging.DEBUG),
+            after=after_log(logger, logging.INFO),
         )
         def _completion_with_retry(**kwargs: Any) -> Any:
             return openai.Completion.create(**kwargs)
