@@ -1,7 +1,7 @@
 {
 	"type": "plugin",
 	"handle": "gpt-3",
-	"version": "0.0.11",
+	"version": "0.0.13",
 	"description": "Complete prompts and generate text with OpenAI.",
 	"author": "",
 	"entrypoint": "src.api.handler",
@@ -12,7 +12,10 @@
 		"type": "tagger"
 	},
 	"build_config": {
-		"ignore": []
+		"ignore": [
+			"tests",
+			"examples"
+		]
 	},
 	"configTemplate": {
 		"openai_api_key": {
@@ -74,12 +77,22 @@
 			"type": "boolean",
 			"description": "Pass the generated output back through OpenAI's moderation endpoint and throw an exception if flagged.",
 			"default": true
+		},
+		"max_retries": {
+			"type": "number",
+			"description": "Maximum number of retries to make when generating.",
+			"default": 8
+		},
+		"request_timeout": {
+			"type": "number",
+			"description": "Timeout for requests to OpenAI completion API. Default is 600 seconds.",
+			"default": 600
 		}
 	},
 	"steamshipRegistry": {
-		"tagline": "Complete prompts and generate text.",
-		"tagline2": "Combine with other models and SteamshipQL to add memory.",
-		"usefulFor": "Adding on-demand replies and suggestions to users.",
+		"tagline": "Complete prompts and generate text with OpenAI.",
+		"tagline2": null,
+		"usefulFor": null,
 		"videoUrl": null,
 		"githubUrl": "https://github.com/steamship-plugins/prompt-generation-default",
 		"demoUrl": null,
@@ -88,8 +101,8 @@
 		"authorGithub": "dkolas",
 		"authorName": "dkolas",
 		"authorEmail": "developers@steamship.com",
-		"authorTwitter": "",
-		"authorUrl": "",
+		"authorTwitter": null,
+		"authorUrl": null,
 		"tags": [
 			"NLP",
 			"OpenAI",

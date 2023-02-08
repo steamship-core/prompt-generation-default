@@ -8,7 +8,7 @@ import pytest
 from steamship import Block, File, PluginInstance, Steamship, TaskState
 from steamship.data import GenerationTag, TagKind, TagValueKey
 
-GENERATOR_HANDLE = "gpt-3"
+GENERATOR_HANDLE = "openai"
 ENVIRONMENT = "prod"
 
 
