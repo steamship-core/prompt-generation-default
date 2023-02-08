@@ -200,12 +200,12 @@ class PromptGenerationPlugin(Tagger):
             user: Optional[str] = None
     ) -> (List[List[str]], Dict[str, int]):
 
-        if self.config.max_tokens == -1:
+        if self.config.max_words == -1:
             if len(prompts) != 1:
                 raise ValueError(
-                    "max_tokens set to -1 not supported for multiple inputs."
+                    "max_words set to -1 not supported for multiple inputs."
                 )
-            self.config.max_tokens = self._max_tokens_for_prompt(prompts[0])
+            self.config.max_words = self._max_tokens_for_prompt(prompts[0])
 
         if stop is not None:
             if self.config.stop:

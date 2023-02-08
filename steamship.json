@@ -1,7 +1,7 @@
 {
 	"type": "plugin",
-	"handle": "dave-gpt3",
-	"version": "0.0.5",
+	"handle": "gpt-3",
+	"version": "0.0.6",
 	"description": "",
 	"author": "",
 	"entrypoint": "src.api.handler",
@@ -23,12 +23,12 @@
 			"description": "An openAI API key to use. If left default, will use Steamship's API key.",
 			"default": ""
 		},
-		"max_tokens": {
+		"max_words": {
 			"type": "number",
-			"description": "The maximum number of tokens to generate per request",
+			"description": "The maximum number of words to generate per request",
 			"default": null
 		},
-		"model_name": {
+		"model": {
 			"type": "string",
 			"description": "The OpenAI model to use.  Can be a pre-existing fine-tuned model.",
 			"default": "text-davinci-003"
@@ -43,7 +43,7 @@
 			"description": "Controls the nucleus sampling, where the model considers the results of the tokens with top_p probability mass. Values between 0-1.",
 			"default": 1
 		},
-		"n": {
+		"n_completions": {
 			"type": "number",
 			"description": "How many completions to generate for each prompt.",
 			"default": 1
@@ -60,12 +60,12 @@
 		},
 		"presence_penalty": {
 			"type": "number",
-			"description": "Control how likely the model will reuse tokens. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics. Number between -2.0 and 2.0.",
+			"description": "Control how likely the model will reuse words. Positive values penalize new tokens based on whether they appear in the text so far, increasing the model's likelihood to talk about new topics. Number between -2.0 and 2.0.",
 			"default": 0
 		},
 		"frequency_penalty": {
 			"type": "number",
-			"description": "Control how likely the model will reuse tokens. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim. Number between -2.0 and 2.0.",
+			"description": "Control how likely the model will reuse words. Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model's likelihood to repeat the same line verbatim. Number between -2.0 and 2.0.",
 			"default": 0
 		},
 		"best_of": {
