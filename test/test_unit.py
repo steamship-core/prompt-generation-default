@@ -1,7 +1,8 @@
 import json
 from pathlib import Path
 
-from steamship import Block, File, TaskState
+import pytest
+from steamship import Block, File, TaskState, SteamshipError
 from steamship.data import GenerationTag, TagKind, TagValueKey
 from steamship.plugin.inputs.block_and_tag_plugin_input import BlockAndTagPluginInput
 from steamship.plugin.request import PluginRequest
@@ -67,3 +68,12 @@ def test_tagger_multiblock():
     assert len(response.data.file.blocks[1].tags) == config['n_completions']
     second_block_completion = response.data.file.blocks[1].tags[0].value[TagValueKey.STRING_VALUE].lower()
     assert "yellow" in second_block_completion
+
+def test_content_flagging():
+    config = json.load(Path("config.json").open())
+    tagger = PromptGenerationPlugin(config=config)
+    file = File(id="foo",
+                blocks=[Block(text="<Insert something super offensive here to run this test>")])
+    request = PluginRequest(data=BlockAndTagPluginInput(file=file))
+    with pytest.raises(SteamshipError):
+        _ = tagger.run(request)

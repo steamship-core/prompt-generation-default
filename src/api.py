@@ -226,6 +226,10 @@ class PromptGenerationPlugin(Tagger):
         file = request.data.file
         prompts = [block.text for block in file.blocks]
         user_id = self.context.user_id if self.context is not None else "testing"
+
+        if self._flagged([prompts]):
+            raise SteamshipError("Sorry, this content is flagged as inappropriate by OpenAI.")
+
         generated_texts, token_usage = self._complete_text(prompts=prompts, user=user_id)
         if self.config.moderate_output and self._flagged(generated_texts):
             raise SteamshipError(
