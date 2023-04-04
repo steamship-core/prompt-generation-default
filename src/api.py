@@ -1,7 +1,6 @@
 """Default generation plugin for prompts."""
 import json
 import logging
-from collections import defaultdict
 from typing import Any, Dict, List, Optional, Type
 
 import openai
@@ -11,6 +10,7 @@ from steamship.data import GenerationTag, TagKind, TagValueKey
 from steamship.invocable import Config, InvocableResponse, InvocationContext
 from steamship.plugin.inputs.block_and_tag_plugin_input import BlockAndTagPluginInput
 from steamship.plugin.outputs.block_and_tag_plugin_output import BlockAndTagPluginOutput
+from steamship.plugin.outputs.plugin_output import OperationType, OperationUnit, UsageReport
 from steamship.plugin.request import PluginRequest
 from steamship.plugin.tagger import Tagger
 from tenacity import (
@@ -200,7 +200,6 @@ class PromptGenerationPlugin(Tagger):
             **invocation_params,
         )
         result = []
-        token_usage = defaultdict(int)
         for i in range(0, len(completion.choices), self.config.n_completions):
             result.append(
                 [
@@ -208,9 +207,24 @@ class PromptGenerationPlugin(Tagger):
                     for choice in completion.choices[i : i + self.config.n_completions]
                 ]
             )
-        for key, usage in completion.usage.items():
-            token_usage[key] += usage
-        return result, token_usage
+        usage = completion["usage"]
+        usage["completion_id"] = completion["id"]
+
+        usage_reports = [
+            UsageReport(
+                operation_type=OperationType.RUN,
+                operation_unit=OperationUnit.PROMPT_TOKENS,
+                operation_amount=usage["prompt_tokens"],
+                audit_id=usage["completion_id"],
+            ),
+            UsageReport(
+                operation_type=OperationType.RUN,
+                operation_unit=OperationUnit.SAMPLED_TOKENS,
+                operation_amount=usage["completion_tokens"],
+                audit_id=usage["completion_id"],
+            ),
+        ]
+        return result, usage_reports
 
     @staticmethod
     def _flagged(responses: List[List[str]]) -> bool:
@@ -230,7 +244,7 @@ class PromptGenerationPlugin(Tagger):
         if self._flagged([prompts]):
             raise SteamshipError("Sorry, this content is flagged as inappropriate by OpenAI.")
 
-        generated_texts, token_usage = self._complete_text(prompts=prompts, user=user_id)
+        generated_texts, usage_reports = self._complete_text(prompts=prompts, user=user_id)
         if self.config.moderate_output and self._flagged(generated_texts):
             raise SteamshipError(
                 "At least one of the responses was flagged as inappropriate by OpenAI. "
@@ -247,6 +261,4 @@ class PromptGenerationPlugin(Tagger):
                     )
                 )
 
-        file.tags.append(Tag(kind="token_usage", name="token_usage", value=token_usage))
-
-        return InvocableResponse(data=BlockAndTagPluginOutput(file=file))
+        return InvocableResponse(data=BlockAndTagPluginOutput(file=file, usage=usage_reports))
