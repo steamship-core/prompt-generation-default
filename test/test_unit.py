@@ -83,3 +83,10 @@ def test_content_flagging():
     request = PluginRequest(data=BlockAndTagPluginInput(file=file))
     with pytest.raises(SteamshipError):
         _ = tagger.run(request)
+
+def test_invalid_model_for_billing():
+    config = json.load(Path("config.json").open())
+    config['model'] = 'a model that does not exist'
+    with pytest.raises(SteamshipError) as e:
+        _ = PromptGenerationPlugin(config=config)
+        assert "This plugin cannot be used with model" in str(e)

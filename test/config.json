@@ -1,4 +1,5 @@
 {
+  "openai_api_key": "",
   "max_words" : 100,
   "stop": "tst,test",
   "n_completions": 2,
