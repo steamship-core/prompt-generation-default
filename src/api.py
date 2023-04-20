@@ -24,6 +24,16 @@ from tenacity import (
 
 from utils import max_tokens_for_prompt
 
+VALID_MODELS_FOR_BILLING = [
+    'text-ada-001',
+    'text-babbage-001',
+    'text-curie-001',
+    'text-davinci-002',
+    'text-davinci-003',
+    'code-cushman-001',
+    'gpt-3.5-turbo',
+    'gpt-4'
+]
 
 class PromptGenerationPlugin(Tagger):
     """Default plugin for generating text based on a prompt.
@@ -97,8 +107,14 @@ class PromptGenerationPlugin(Tagger):
         config: Dict[str, Any] = None,
         context: InvocationContext = None,
     ):
+        # Load original api key before it is read from TOML, so we know to restrict models for billing
+        original_api_key = config['openai_api_key']
         super().__init__(client, config, context)
         openai.api_key = self.config.openai_api_key
+
+        if original_api_key == "" and self.config.model not in VALID_MODELS_FOR_BILLING:
+            raise SteamshipError(
+                f"This plugin cannot be used with model {self.config.model} while using Steamship's API key. Valid models are {VALID_MODELS_FOR_BILLING}")
 
         if self.config.model.startswith("gpt-3.5-turbo"):
             self.llm = openai.ChatCompletion
