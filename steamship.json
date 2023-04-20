@@ -1,7 +1,7 @@
 {
 	"type": "plugin",
-	"handle": "gpt-3",
-	"version": "0.1.0",
+	"handle": "prompt-generation-default",
+	"version": "1.0.0",
 	"description": "Complete prompts and generate text with OpenAI.",
 	"author": "",
 	"entrypoint": "src.api.handler",
